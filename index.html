@@ -2,13 +2,13 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Steve & Liz ☕💛 (Cita Perfecta)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Steve & Liz ☕💛</title>
   <style>
     :root{
       --shadow: rgba(0,0,0,.18);
-      --panel: rgba(255,255,255,.74);
-      --panel2: rgba(255,255,255,.94);
+      --panel: rgba(255,255,255,.78);
+      --panel2: rgba(255,255,255,.95);
 
       --sky1:#bfe9ff;
       --sky2:#f8fbff;
@@ -38,39 +38,45 @@
       --lizDress:#ff5fa8;
       --lizDress2:#ff8dc1;
 
-      --safePad: clamp(10px, 3vw, 26px);
-      --uiH: 150px;
-      --tableH: 190px;
-      --charPadBottom: 270px;
+      --safePad: clamp(10px, 3vw, 22px);
+
+      --titleH: clamp(46px, 6vh, 68px);
+      --tableH: clamp(110px, 18vh, 200px);
+      --charW: clamp(210px, 30vw, 380px);
+
+      --charScale: 1;
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
+
     body{
       margin:0;
       font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,"Segoe UI Emoji","Apple Color Emoji";
-      overflow:hidden;
       background:
         radial-gradient(1200px 700px at 20% 15%, rgba(255,255,255,.55), transparent 60%),
         radial-gradient(900px 600px at 80% 15%, rgba(255,210,232,.55), transparent 55%),
         linear-gradient(180deg, var(--sky1) 0%, var(--sky2) 55%, var(--grass) 100%);
+      overflow:hidden;
     }
 
     .wrap{
-      height:100%;
+      height: 100dvh;
+      width: 100%;
+      padding: var(--safePad);
       display:flex;
       align-items:center;
       justify-content:center;
-      padding: var(--safePad);
     }
 
     .scene{
-      width:min(1280px, 100%);
-      height:min(780px, 92vh);
+      width: min(1280px, 100%);
+      height: calc(100dvh - (var(--safePad) * 2));
+      max-height: 860px;
       min-height: 560px;
       position:relative;
       border-radius: clamp(18px, 2.2vw, 28px);
-      overflow:hidden; /* mantiene bordes bonitos */
+      overflow:hidden;
       box-shadow: 0 18px 60px var(--shadow);
       border:1px solid rgba(255,255,255,.55);
       background:
@@ -80,7 +86,16 @@
       backdrop-filter: blur(6px);
     }
 
-    /* Café ambience */
+    .layout{
+      position:absolute;
+      inset:0;
+      display:grid;
+      grid-template-rows: var(--titleH) 1fr auto; /* TÍTULO / ESCENA / PANEL */
+      z-index: 2;
+      min-height: 100%;
+    }
+
+    /* Café BG */
     .cafeBg{ position:absolute; inset:0; pointer-events:none; z-index:0; }
     .cafeBg .wall{
       position:absolute; inset:0;
@@ -94,9 +109,9 @@
       position:absolute;
       left:50%;
       transform:translateX(-50%);
-      top: clamp(12px, 2.2vh, 22px);
-      width: min(820px, 94%);
-      height: clamp(138px, 18vh, 195px);
+      top: clamp(10px, 1.8vh, 18px);
+      width: min(880px, 94%);
+      height: clamp(110px, 15vh, 175px);
       border-radius: 26px;
       background:
         radial-gradient(120px 120px at 20% 30%, rgba(255,255,255,.30), transparent 60%),
@@ -122,32 +137,6 @@
       opacity:.55;
     }
 
-    .neon{
-      position:absolute;
-      left:50%;
-      transform:translateX(-50%);
-      top: clamp(22px, 4.2vh, 42px);
-      padding: 10px 16px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.22);
-      border: 1px solid rgba(255,255,255,.52);
-      box-shadow: 0 18px 40px rgba(0,0,0,.10);
-      backdrop-filter: blur(10px);
-      z-index:3;
-      pointer-events:none;
-    }
-    .neon span{
-      font-weight: 1000;
-      letter-spacing:.3px;
-      font-size: clamp(14px, 2.1vw, 18px);
-      color: rgba(20,20,30,.86);
-      text-shadow:
-        0 0 10px rgba(255, 90, 170, .30),
-        0 0 16px rgba(255, 220, 120, .25),
-        0 0 22px rgba(160, 240, 255, .25);
-      white-space:nowrap;
-    }
-
     /* Bokeh */
     .bokeh{ position:absolute; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
     .orb{
@@ -170,9 +159,9 @@
     /* Sun + clouds */
     .sun{
       position:absolute;
-      top: clamp(12px, 2.2vw, 22px);
-      right: clamp(12px, 2.2vw, 22px);
-      width: clamp(64px, 7.2vw, 92px);
+      top: clamp(10px, 2.2vw, 18px);
+      right: clamp(10px, 2.2vw, 18px);
+      width: clamp(56px, 7.2vw, 92px);
       aspect-ratio:1/1;
       border-radius:50%;
       background:
@@ -185,7 +174,6 @@
       pointer-events:none;
     }
     @keyframes floatSun{0%,100%{transform:translateY(0)}50%{transform:translateY(6px)}}
-
     .cloud{
       position:absolute;
       top: 18%;
@@ -207,7 +195,7 @@
     @keyframes cloudMove{0%{transform:translateX(0)}100%{transform:translateX(190%)}}
 
     /* Hearts */
-    .heartsLayer{ position:absolute; inset:0; pointer-events:none; z-index:6; }
+    .heartsLayer{ position:absolute; inset:0; pointer-events:none; z-index:30; }
     .heart{
       position:absolute;
       width: 18px; height: 18px;
@@ -233,15 +221,56 @@
       to  { transform: translateY(-190px) rotate(45deg) scale(1.22); opacity:0 }
     }
 
-    /* Table */
+    /* Title chip */
+    .titleBar{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      z-index: 10;
+      pointer-events:none;
+    }
+    .neon{
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.22);
+      border: 1px solid rgba(255,255,255,.52);
+      box-shadow: 0 18px 40px rgba(0,0,0,.10);
+      backdrop-filter: blur(10px);
+      max-width: min(92%, 760px);
+    }
+    .neon span{
+      font-weight: 1000;
+      letter-spacing:.3px;
+      font-size: clamp(13px, 2.2vw, 18px);
+      color: rgba(20,20,30,.86);
+      text-shadow:
+        0 0 10px rgba(255, 90, 170, .30),
+        0 0 16px rgba(255, 220, 120, .25),
+        0 0 22px rgba(160, 240, 255, .25);
+      white-space:nowrap;
+      display:block;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    /* Stage */
+    .stage{
+      position:relative;
+      overflow:hidden;
+      z-index: 10;
+      min-height: 260px;
+    }
+
+    /* Table (PEGADA AL FONDO DEL STAGE, NO AL PANEL) */
     .tableWrap{
       position:absolute;
       left:50%;
       transform:translateX(-50%);
-      bottom: calc(var(--uiH) + 18px);
-      width: min(820px, 95%);
+      bottom: 12px; /* <-- FIX */
+      width: min(900px, 95%);
       height: var(--tableH);
-      z-index:7;
+      z-index:11;
       pointer-events:none;
       filter: drop-shadow(0 18px 28px rgba(0,0,0,.14));
     }
@@ -265,8 +294,8 @@
     }
     .cookie{
       position:absolute;
-      width: 56px;
-      height: 56px;
+      width: clamp(42px, 5.5vw, 56px);
+      height: clamp(42px, 5.5vw, 56px);
       border-radius: 50%;
       background:
         radial-gradient(circle at 35% 35%, rgba(255,255,255,.35), transparent 55%),
@@ -280,69 +309,68 @@
     .cookie.c1{ left: 18%; transform: rotate(-10deg); }
     .cookie.c2{ right: 18%; transform: rotate(14deg) scale(.92); }
 
-    /* Characters */
+    /* Characters (SIN padding-bottom del panel; escala automática) */
     .characters{
       position:absolute;
       inset:0;
-      z-index:8;
       display:flex;
       align-items:flex-end;
       justify-content:space-between;
       padding: var(--safePad);
-      padding-bottom: var(--charPadBottom);
+      padding-bottom: 32px; /* <-- FIX */
       gap: clamp(10px, 3vw, 40px);
+      z-index:12;
       pointer-events:none;
+      transform: scale(var(--charScale));
+      transform-origin: 50% 100%;
     }
 
     .char{
-      width: clamp(210px, 26vw, 380px);
+      width: var(--charW);
       max-width: 48%;
+      position:relative;
       display:flex;
       flex-direction:column;
       align-items:center;
-      position:relative;
       user-select:none;
       filter: drop-shadow(0 18px 28px rgba(0,0,0,.14));
       transform-origin: 50% 100%;
       transition: transform .35s ease;
-      pointer-events:none;
-
-      /* IMPORTANTE: esto evita que nombre y burbuja se “salgan” y se corten */
-      padding-top: 84px;
+      padding-top: 78px;
     }
 
-    /* Name tag (SIN top negativo) */
     .nameTag{
       position:absolute;
-      top: 10px;
+      top: 8px;
       left:50%;
       transform: translate(calc(-50% + var(--clampX, 0px)), calc(0px + var(--clampY, 0px)));
       padding: 10px 14px;
       border-radius: 999px;
-      background: rgba(255,255,255,.86);
+      background: rgba(255,255,255,.90);
       border: 1px solid rgba(255,255,255,.92);
       box-shadow: 0 12px 22px rgba(0,0,0,.10);
       backdrop-filter: blur(10px);
       font-weight: 1000;
       letter-spacing:.2px;
-      font-size: clamp(14px, 2.1vw, 18px);
+      font-size: clamp(13px, 2.2vw, 18px);
       display:flex;
       align-items:center;
       gap: 8px;
-      z-index:22;
-      pointer-events:none;
+      z-index:40;
       white-space:nowrap;
+      max-width: 92%;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
     .nameTag small{font-weight:900;opacity:.75;font-size:.88em}
 
-    /* Bubble (SIN top negativo) */
     .bubble{
       position:absolute;
       left:50%;
-      bottom: calc(100% - 4px); /* sube arriba del personaje */
+      bottom: calc(100% - 2px);
       transform: translate(calc(-50% + var(--clampX, 0px)), calc(0px + var(--clampY, 0px)));
-      width: min(460px, 78vw);
-      max-width: 480px;
+      width: min(520px, 90vw);
+      max-width: 560px;
       background: var(--panel2);
       border: 1px solid rgba(0,0,0,.06);
       border-radius: 18px;
@@ -351,7 +379,7 @@
       backdrop-filter: blur(14px);
       opacity: 0;
       transition: opacity .22s ease;
-      z-index:24;
+      z-index:42;
       pointer-events:none;
     }
     .bubble.show{ opacity:1; }
@@ -367,7 +395,7 @@
     }
     .bubble .msg{
       font-weight: 1000;
-      font-size: clamp(14px, 2.3vw, 16px);
+      font-size: clamp(14px, 2.4vw, 16px);
       line-height: 1.25;
       color: rgba(20,20,30,.92);
       word-wrap: break-word;
@@ -409,27 +437,21 @@
       transform-origin: 130px 126px;
     }
     @keyframes beakTalk{ 0%,100%{ transform: rotate(0deg); } 50%{ transform: rotate(16deg); } }
-
     .talkingLiz .mouthClosed{ opacity:0; }
     .talkingLiz .mouthOpen{ opacity:1; }
 
-    /* Blink */
-    .blink{ transform-origin:center; animation: blink 4.2s infinite; }
-    .blink.lizBlink{ animation-duration: 4.0s; animation-delay: .6s; }
-    @keyframes blink{ 0%, 92%, 100%{ transform: scaleY(1); } 94%, 96%{ transform: scaleY(.12); } }
-
-    /* Sip – cup to mouth (más claro, sube MÁS) */
+    /* Sip */
     .sipSteve #steveCupWrap{ animation: sipCupSteve 1.25s ease-in-out infinite; transform-origin: 118px 178px; }
     .sipLiz   #lizCupWrap  { animation: sipCupLiz   1.25s ease-in-out infinite; transform-origin: 168px 178px; }
     @keyframes sipCupSteve{
       0%,100%{ transform: translate(0,0) rotate(0deg); }
-      45%{ transform: translate(40px,-92px) rotate(-16deg); }
-      70%{ transform: translate(40px,-92px) rotate(-16deg); }
+      45%{ transform: translate(42px,-98px) rotate(-16deg); }
+      70%{ transform: translate(42px,-98px) rotate(-16deg); }
     }
     @keyframes sipCupLiz{
       0%,100%{ transform: translate(0,0) rotate(0deg); }
-      45%{ transform: translate(-34px,-94px) rotate(16deg); }
-      70%{ transform: translate(-34px,-94px) rotate(16deg); }
+      45%{ transform: translate(-36px,-98px) rotate(16deg); }
+      70%{ transform: translate(-36px,-98px) rotate(16deg); }
     }
 
     /* Steam */
@@ -439,7 +461,7 @@
       stroke-width: 3.2;
       stroke-linecap: round;
       stroke-linejoin: round;
-      filter: blur(.35px);
+      filter: blur(.45px);
       opacity: 0;
       animation: steamRise 1.9s ease-in-out infinite;
     }
@@ -447,31 +469,78 @@
     .steamPath.s3{ animation-delay: .7s; }
     @keyframes steamRise{
       0%   { opacity:0; transform: translateY(12px) translateX(0px) scale(.98); }
-      18%  { opacity:.75; }
-      55%  { opacity:.55; transform: translateY(-12px) translateX(2px) scale(1.02); }
-      100% { opacity:0; transform: translateY(-30px) translateX(-2px) scale(1.06); }
+      18%  { opacity:.78; }
+      55%  { opacity:.56; transform: translateY(-14px) translateX(2px) scale(1.02); }
+      100% { opacity:0; transform: translateY(-34px) translateX(-2px) scale(1.06); }
     }
 
-    /* Kiss */
-    .kissLeft{ animation: kissLeanL .80s ease-in-out 1; }
-    .kissRight{ animation: kissLeanR .80s ease-in-out 1; }
-    @keyframes kissLeanL{ 0%{ transform: translateX(0) rotate(0deg) } 45%{ transform: translateX(30px) rotate(4deg) } 100%{ transform: translateX(0) rotate(0deg) } }
-    @keyframes kissLeanR{ 0%{ transform: translateX(0) rotate(0deg) } 45%{ transform: translateX(-30px) rotate(-4deg) } 100%{ transform: translateX(0) rotate(0deg) } }
+    /* Bottom drawer panel */
+    .panelWrap{
+      width: 100%;
+      display:flex;
+      justify-content:center;
+      z-index: 60;
+      padding: 10px 10px max(10px, env(safe-area-inset-bottom));
+    }
 
-    /* Panel */
     .panel{
-      position:absolute;
-      left:50%;
-      transform:translateX(-50%);
-      bottom: 14px;
-      width: min(1120px, calc(100% - 24px));
+      width: min(1120px, calc(100% - 12px));
       background: var(--panel);
-      border: 1px solid rgba(255,255,255,.85);
+      border: 1px solid rgba(255,255,255,.86);
       box-shadow: 0 18px 46px rgba(0,0,0,.12);
       border-radius: 18px;
       backdrop-filter: blur(14px);
+      overflow:hidden;
+      position:relative;
+    }
+    .handleRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.65);
+      background: rgba(255,255,255,.52);
+      user-select:none;
+      cursor:pointer;
+    }
+    .grab{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      font-weight: 1000;
+      font-size: 13px;
+      opacity:.9;
+    }
+    .bar{
+      width: 44px; height: 6px;
+      border-radius: 999px;
+      background: rgba(0,0,0,.18);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.35);
+    }
+    .miniBtn{
+      border: 1px solid rgba(255,255,255,.88);
+      background: rgba(255,255,255,.78);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+      box-shadow: 0 12px 20px rgba(0,0,0,.10);
+      font-weight: 1000;
+      font-size: 12px;
+      white-space:nowrap;
+    }
+    .miniBtn:active{ transform: translateY(1px); }
+
+    .panelBody{
       padding: 12px 12px;
-      z-index:30;
+      max-height: min(46vh, 360px);
+      overflow:auto;
+    }
+    .panel.collapsed .panelBody{
+      max-height: 0px;
+      padding-top: 0;
+      padding-bottom: 0;
+      overflow:hidden;
     }
 
     .panelRow{
@@ -480,7 +549,6 @@
       align-items:center;
       flex-wrap:wrap;
     }
-
     .seg{
       display:flex;
       gap: 10px;
@@ -490,6 +558,7 @@
       border-radius: 14px;
       padding: 10px 10px;
       box-shadow: 0 12px 22px rgba(0,0,0,.06);
+      flex: 0 0 auto;
     }
     .seg label{
       font-weight:1000;
@@ -504,8 +573,8 @@
     .seg input{accent-color: var(--heart)}
 
     .input{
-      flex: 1;
-      min-width: 360px; /* IMPORTANT: ya no se corta lo que escribes */
+      flex: 1 1 360px;
+      min-width: min(520px, 100%);
       display:flex;
       gap: 10px;
       align-items:center;
@@ -526,7 +595,7 @@
 
     .btn{
       border: 1px solid rgba(255,255,255,.88);
-      background: rgba(255,255,255,.76);
+      background: rgba(255,255,255,.78);
       backdrop-filter: blur(10px);
       border-radius: 14px;
       padding: 10px 12px;
@@ -547,7 +616,7 @@
 
     .hint{
       font-size:12px;
-      opacity:.78;
+      opacity:.80;
       margin-top:8px;
       font-weight:950;
       display:flex;
@@ -568,15 +637,14 @@
       white-space:nowrap;
     }
 
-    /* Toast */
     .toast{
       position:absolute;
       left: 50%;
       transform: translateX(-50%);
       top: 10px;
-      z-index: 40;
-      background: rgba(255,255,255,.78);
-      border: 1px solid rgba(255,255,255,.90);
+      z-index: 70;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(255,255,255,.92);
       box-shadow: 0 18px 36px rgba(0,0,0,.12);
       backdrop-filter: blur(14px);
       border-radius: 999px;
@@ -587,28 +655,39 @@
       pointer-events:none;
       transition: opacity .25s ease, transform .25s ease;
       white-space:nowrap;
+      max-width: 92%;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
     .toast.show{ opacity: 1; transform: translateX(-50%) translateY(6px); }
 
-    /* Responsive */
-    @media (max-width: 920px){
-      :root{ --uiH: 180px; --tableH: 175px; --charPadBottom: 300px; }
-      .input{ min-width: 280px; }
-    }
-    @media (max-width: 760px){
-      :root{ --uiH: 210px; --tableH: 170px; --charPadBottom: 320px; }
-      .characters{
-        flex-direction: column;
-        justify-content:flex-end;
-        align-items:center;
-        gap: 12px;
-        padding-bottom: var(--charPadBottom);
+    /* MOBILE PORTRAIT */
+    @media (max-width: 640px) and (orientation: portrait){
+      .scene{
+        max-height: none;
+        height: calc(100dvh - (var(--safePad) * 2));
+        min-height: 620px;
       }
-      .char{ max-width: 92%; width: min(380px, 92%); }
-      .bubble{ width: min(480px, 88vw); }
-      .input{ min-width: 220px; }
+      :root{
+        --tableH: clamp(88px, 12.5vh, 130px);
+        --charW: clamp(150px, 44vw, 210px);
+        --titleH: clamp(44px, 6.5vh, 64px);
+      }
     }
-
+    @media (max-width: 380px) and (orientation: portrait){
+      :root{
+        --charW: clamp(140px, 46vw, 190px);
+        --tableH: clamp(78px, 11vh, 110px);
+      }
+      .cookie{ display:none; }
+    }
+    @media (max-width: 520px){
+      .panelRow{ flex-direction: column; align-items: stretch; }
+      .seg{ width: 100%; justify-content: center; }
+      .btn{ width: 100%; justify-content: center; }
+      .hint{ justify-content:center; }
+      .input{ min-width: 100%; }
+    }
     @media (prefers-reduced-motion: reduce){
       *{ animation: none !important; transition:none !important; }
     }
@@ -626,8 +705,6 @@
         <div class="orb"></div><div class="orb"></div><div class="orb"></div><div class="orb"></div><div class="orb"></div>
       </div>
 
-      <div class="neon" aria-hidden="true"><span>☕ Cafecito de Steve & Liz ✨</span></div>
-
       <div class="sun" aria-hidden="true"></div>
       <div class="cloud" aria-hidden="true"></div>
       <div class="cloud c2" aria-hidden="true"></div>
@@ -635,251 +712,254 @@
       <div class="toast" id="toast">✨</div>
       <div class="heartsLayer" id="heartsLayer" aria-hidden="true"></div>
 
-      <!-- Table -->
-      <div class="tableWrap" aria-hidden="true">
-        <div class="tableTop"></div>
-        <div class="cookie c1"></div>
-        <div class="cookie c2"></div>
-        <div class="tableEdge"></div>
-      </div>
+      <div class="layout">
+        <div class="titleBar" aria-hidden="true">
+          <div class="neon"><span>☕ Cafecito de Steve & Liz ✨</span></div>
+        </div>
 
-      <!-- Characters -->
-      <div class="characters">
-        <!-- Steve -->
-        <div class="char" id="steveChar">
-          <div class="nameTag" id="steveTag">🐥 <strong>Steve</strong> <small>pollito</small></div>
-
-          <div class="bubble" id="steveBubble">
-            <div class="who">🐥 Steve dice:</div>
-            <div class="msg" id="steveMsg">...</div>
+        <div class="stage" id="stage">
+          <div class="tableWrap" aria-hidden="true">
+            <div class="tableTop"></div>
+            <div class="cookie c1"></div>
+            <div class="cookie c2"></div>
+            <div class="tableEdge"></div>
           </div>
 
-          <svg id="steveSvg" class="steve" width="100%" viewBox="0 0 260 260" role="img" aria-label="Steve el pollito con café">
-            <defs>
-              <radialGradient id="gChick" cx="35%" cy="30%" r="80%">
-                <stop offset="0%" stop-color="var(--steveY2)"/>
-                <stop offset="75%" stop-color="var(--steveY)"/>
-              </radialGradient>
-              <radialGradient id="gSpec" cx="30%" cy="25%" r="60%">
-                <stop offset="0%" stop-color="rgba(255,255,255,.55)"/>
-                <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-              </radialGradient>
-            </defs>
+          <div class="characters" id="characters">
+            <!-- Steve -->
+            <div class="char" id="steveChar">
+              <div class="nameTag" id="steveTag">🐥 <strong>Steve</strong> <small>pollito</small></div>
 
-            <ellipse cx="130" cy="238" rx="84" ry="16" fill="rgba(0,0,0,.10)"/>
+              <div class="bubble" id="steveBubble">
+                <div class="who">🐥 Steve dice:</div>
+                <div class="msg" id="steveMsg">...</div>
+              </div>
 
-            <ellipse cx="130" cy="155" rx="96" ry="82" fill="url(#gChick)" stroke="rgba(0,0,0,.10)" stroke-width="3"/>
-            <ellipse cx="118" cy="132" rx="64" ry="46" fill="url(#gSpec)" opacity=".65"/>
-            <ellipse cx="130" cy="172" rx="64" ry="50" fill="rgba(255,255,255,.16)"/>
+              <svg id="steveSvg" class="steve" width="100%" viewBox="0 0 260 260" role="img" aria-label="Steve el pollito con café">
+                <defs>
+                  <radialGradient id="gChick" cx="35%" cy="30%" r="80%">
+                    <stop offset="0%" stop-color="var(--steveY2)"/>
+                    <stop offset="75%" stop-color="var(--steveY)"/>
+                  </radialGradient>
+                  <radialGradient id="gSpec" cx="30%" cy="25%" r="60%">
+                    <stop offset="0%" stop-color="rgba(255,255,255,.55)"/>
+                    <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                  </radialGradient>
+                </defs>
 
-            <path d="M103 156 C114 149, 126 149, 138 156" fill="none" stroke="rgba(0,0,0,.07)" stroke-width="3" stroke-linecap="round"/>
-            <path d="M112 168 C122 162, 134 162, 144 168" fill="none" stroke="rgba(0,0,0,.06)" stroke-width="3" stroke-linecap="round"/>
+                <ellipse cx="130" cy="238" rx="84" ry="16" fill="rgba(0,0,0,.10)"/>
 
-            <path d="M55 154 C30 156, 28 192, 66 196 C96 199, 106 172, 96 160 C90 149, 72 149, 55 154Z"
-                  fill="rgba(255,255,255,.16)" stroke="rgba(0,0,0,.10)" stroke-width="3"/>
-            <path d="M205 154 C230 156, 232 192, 194 196 C164 199, 154 172, 164 160 C170 149, 188 149, 205 154Z"
-                  fill="rgba(255,255,255,.16)" stroke="rgba(0,0,0,.10)" stroke-width="3"/>
+                <ellipse cx="130" cy="155" rx="96" ry="82" fill="url(#gChick)" stroke="rgba(0,0,0,.10)" stroke-width="3"/>
+                <ellipse cx="118" cy="132" rx="64" ry="46" fill="url(#gSpec)" opacity=".65"/>
+                <ellipse cx="130" cy="172" rx="64" ry="50" fill="rgba(255,255,255,.16)"/>
 
-            <circle cx="130" cy="92" r="70" fill="url(#gChick)" stroke="rgba(0,0,0,.10)" stroke-width="3"/>
-            <ellipse cx="118" cy="70" rx="50" ry="38" fill="url(#gSpec)" opacity=".70"/>
+                <path d="M55 154 C30 156, 28 192, 66 196 C96 199, 106 172, 96 160 C90 149, 72 149, 55 154Z"
+                      fill="rgba(255,255,255,.16)" stroke="rgba(0,0,0,.10)" stroke-width="3"/>
+                <path d="M205 154 C230 156, 232 192, 194 196 C164 199, 154 172, 164 160 C170 149, 188 149, 205 154Z"
+                      fill="rgba(255,255,255,.16)" stroke="rgba(0,0,0,.10)" stroke-width="3"/>
 
-            <path d="M106 28 C118 10, 140 8, 152 22 C140 38, 120 40, 106 28Z" fill="rgba(255,255,255,.22)"/>
-            <path d="M138 24 C154 6, 176 12, 178 36 C162 44, 150 40, 138 24Z" fill="rgba(255,255,255,.16)"/>
+                <circle cx="130" cy="92" r="70" fill="url(#gChick)" stroke="rgba(0,0,0,.10)" stroke-width="3"/>
+                <ellipse cx="118" cy="70" rx="50" ry="38" fill="url(#gSpec)" opacity=".70"/>
 
-            <g>
-              <g class="eyeNormal">
-                <circle cx="104" cy="88" r="18" fill="#fff" stroke="rgba(0,0,0,.12)" stroke-width="3"/>
-                <circle cx="156" cy="88" r="18" fill="#fff" stroke="rgba(0,0,0,.12)" stroke-width="3"/>
-                <circle cx="106" cy="90" r="10.2" fill="var(--steveEye)"/>
-                <circle cx="158" cy="90" r="10.2" fill="var(--steveEye)"/>
-                <circle class="pupilMove" cx="110" cy="94" r="3.5" fill="rgba(0,0,0,.55)"/>
-                <circle class="pupilMove" cx="162" cy="94" r="3.5" fill="rgba(0,0,0,.55)"/>
-                <circle cx="102" cy="84" r="3.2" fill="rgba(255,255,255,.95)"/>
-                <circle cx="154" cy="84" r="3.2" fill="rgba(255,255,255,.95)"/>
+                <g>
+                  <g class="eyeNormal">
+                    <circle cx="104" cy="88" r="18" fill="#fff" stroke="rgba(0,0,0,.12)" stroke-width="3"/>
+                    <circle cx="156" cy="88" r="18" fill="#fff" stroke="rgba(0,0,0,.12)" stroke-width="3"/>
+                    <circle cx="106" cy="90" r="10.2" fill="var(--steveEye)"/>
+                    <circle cx="158" cy="90" r="10.2" fill="var(--steveEye)"/>
+                    <circle class="pupilMove" cx="110" cy="94" r="3.5" fill="rgba(0,0,0,.55)"/>
+                    <circle class="pupilMove" cx="162" cy="94" r="3.5" fill="rgba(0,0,0,.55)"/>
+                    <circle cx="102" cy="84" r="3.2" fill="rgba(255,255,255,.95)"/>
+                    <circle cx="154" cy="84" r="3.2" fill="rgba(255,255,255,.95)"/>
+                  </g>
 
-                <g class="blink">
-                  <rect x="86" y="82" width="36" height="16" rx="8" fill="rgba(255,216,74,.96)" opacity=".0"></rect>
-                  <rect x="138" y="82" width="36" height="16" rx="8" fill="rgba(255,216,74,.96)" opacity=".0"></rect>
+                  <g class="eyeHeart" opacity="0">
+                    <path d="M92 86 C92 77, 104 77, 106 85 C108 77, 120 77, 120 86
+                             C120 97, 106 102, 106 102 C106 102, 92 97, 92 86Z"
+                          fill="var(--heart3)" stroke="rgba(0,0,0,.10)" stroke-width="2"/>
+                    <path d="M142 86 C142 77, 154 77, 156 85 C158 77, 170 77, 170 86
+                             C170 97, 156 102, 156 102 C156 102, 142 97, 142 86Z"
+                          fill="var(--heart3)" stroke="rgba(0,0,0,.10)" stroke-width="2"/>
+                  </g>
                 </g>
-              </g>
 
-              <g class="eyeHeart" opacity="0">
-                <path d="M92 86 C92 77, 104 77, 106 85 C108 77, 120 77, 120 86
-                         C120 97, 106 102, 106 102 C106 102, 92 97, 92 86Z"
-                      fill="var(--heart3)" stroke="rgba(0,0,0,.10)" stroke-width="2"/>
-                <path d="M142 86 C142 77, 154 77, 156 85 C158 77, 170 77, 170 86
-                         C170 97, 156 102, 156 102 C156 102, 142 97, 142 86Z"
-                      fill="var(--heart3)" stroke="rgba(0,0,0,.10)" stroke-width="2"/>
-              </g>
-            </g>
-
-            <g id="steveBeak">
-              <path d="M130 108
-                       C118 114, 112 120, 110 126
-                       C118 130, 142 130, 150 126
-                       C148 120, 142 114, 130 108Z"
-                    fill="var(--steveO)" stroke="rgba(0,0,0,.12)" stroke-width="3"/>
-              <g class="lowerBeak">
-                <path d="M110 126
-                         C118 142, 142 142, 150 126
-                         C142 136, 118 136, 110 126Z"
-                      fill="#ffb36b" stroke="rgba(0,0,0,.10)" stroke-width="2"/>
-              </g>
-              <path d="M130 114 C124 118, 124 122, 130 124 C136 122, 136 118, 130 114Z"
-                    fill="rgba(255,255,255,.18)"/>
-            </g>
-
-            <path d="M95 225 C90 235, 95 242, 114 241 C112 234, 104 228, 95 225Z" fill="var(--steveO)" opacity=".95"/>
-            <path d="M165 225 C170 235, 165 242, 146 241 C148 234, 156 228, 165 225Z" fill="var(--steveO)" opacity=".95"/>
-
-            <g id="steveCupWrap">
-              <g id="steveCup">
-                <path d="M100 192 C96 192, 92 188, 92 184 V176 C92 172, 96 170, 100 170 H134 C138 170, 142 172, 142 176 V184
-                         C142 188, 138 192, 134 192 H100Z"
-                      fill="var(--cup)" stroke="rgba(0,0,0,.10)" stroke-width="2"/>
-                <path d="M138 176 C150 178, 150 188, 138 188" fill="none" stroke="rgba(0,0,0,.12)" stroke-width="5" stroke-linecap="round"/>
-                <path d="M98 178 H136" stroke="rgba(0,0,0,.07)" stroke-width="4" stroke-linecap="round"/>
-                <ellipse cx="117" cy="176" rx="18" ry="5" fill="var(--coffee)" opacity=".92"/>
-
-                <path class="steamPath s1" d="M106 166 C110 160, 114 160, 116 154 C118 148, 112 146, 112 140" />
-                <path class="steamPath s2" d="M120 166 C124 160, 128 160, 130 154 C132 148, 126 146, 126 140" />
-                <path class="steamPath s3" d="M134 166 C138 160, 142 160, 144 154 C146 148, 140 146, 140 140" />
-              </g>
-            </g>
-          </svg>
-        </div>
-
-        <!-- Liz -->
-        <div class="char" id="lizChar">
-          <div class="nameTag" id="lizTag">👩‍🦰 <strong>Liz</strong> <small>chica</small></div>
-
-          <div class="bubble right" id="lizBubble">
-            <div class="who">👩‍🦰 Liz dice:</div>
-            <div class="msg" id="lizMsg">...</div>
-          </div>
-
-          <svg id="lizSvg" class="liz" width="100%" viewBox="0 0 260 260" role="img" aria-label="Liz con café">
-            <defs>
-              <linearGradient id="lizDressG" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="var(--lizDress2)"/>
-                <stop offset="100%" stop-color="var(--lizDress)"/>
-              </linearGradient>
-              <radialGradient id="lizSpec" cx="30%" cy="25%" r="60%">
-                <stop offset="0%" stop-color="rgba(255,255,255,.55)"/>
-                <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
-              </radialGradient>
-            </defs>
-
-            <ellipse cx="130" cy="242" rx="84" ry="16" fill="rgba(0,0,0,.10)"/>
-
-            <rect x="108" y="186" width="18" height="44" rx="9" fill="var(--lizSkin)"/>
-            <rect x="134" y="186" width="18" height="44" rx="9" fill="var(--lizSkin)"/>
-
-            <path d="M78 192 C88 150, 106 128, 130 128 C154 128, 172 150, 182 192
-                     C168 206, 150 214, 130 214 C110 214, 92 206, 78 192Z"
-                  fill="url(#lizDressG)" stroke="rgba(0,0,0,.10)" stroke-width="3"/>
-            <path d="M95 146 C105 160, 155 160, 165 146"
-                  fill="none" stroke="rgba(255,255,255,.55)" stroke-width="6" stroke-linecap="round"/>
-
-            <path d="M82 152 C62 162, 62 184, 82 192 C92 196, 100 186, 98 174 C96 162, 90 154, 82 152Z"
-                  fill="var(--lizSkin)" stroke="rgba(0,0,0,.08)" stroke-width="2"/>
-            <path d="M178 152 C198 162, 198 184, 178 192 C168 196, 160 186, 162 174 C164 162, 170 154, 178 152Z"
-                  fill="var(--lizSkin)" stroke="rgba(0,0,0,.08)" stroke-width="2"/>
-
-            <circle cx="130" cy="86" r="58" fill="var(--lizSkin)" stroke="rgba(0,0,0,.10)" stroke-width="3"/>
-            <ellipse cx="118" cy="70" rx="48" ry="38" fill="url(#lizSpec)" opacity=".65"/>
-
-            <path d="M72 90 C72 48, 98 28, 130 28 C168 28, 190 52, 190 92
-                     C182 76, 170 70, 160 68 C154 52, 144 46, 130 46
-                     C114 46, 104 54, 98 68 C88 70, 78 74, 72 90Z"
-                  fill="var(--lizHair)" opacity=".98"/>
-
-            <g>
-              <g class="eyeNormal">
-                <circle cx="108" cy="90" r="15" fill="#fff" stroke="rgba(0,0,0,.12)" stroke-width="3"/>
-                <circle cx="152" cy="90" r="15" fill="#fff" stroke="rgba(0,0,0,.12)" stroke-width="3"/>
-                <circle class="pupilMove" cx="110" cy="93" r="6.7" fill="rgba(0,0,0,.55)"/>
-                <circle class="pupilMove" cx="154" cy="93" r="6.7" fill="rgba(0,0,0,.55)"/>
-                <circle cx="105" cy="86" r="2.8" fill="rgba(255,255,255,.95)"/>
-                <circle cx="149" cy="86" r="2.8" fill="rgba(255,255,255,.95)"/>
-                <g class="blink lizBlink">
-                  <rect x="95" y="86" width="28" height="12" rx="6" fill="rgba(255,229,220,.98)" opacity=".0"></rect>
-                  <rect x="139" y="86" width="28" height="12" rx="6" fill="rgba(255,229,220,.98)" opacity=".0"></rect>
+                <g id="steveBeak">
+                  <path d="M130 108
+                           C118 114, 112 120, 110 126
+                           C118 130, 142 130, 150 126
+                           C148 120, 142 114, 130 108Z"
+                        fill="var(--steveO)" stroke="rgba(0,0,0,.12)" stroke-width="3"/>
+                  <g class="lowerBeak">
+                    <path d="M110 126
+                             C118 142, 142 142, 150 126
+                             C142 136, 118 136, 110 126Z"
+                          fill="#ffb36b" stroke="rgba(0,0,0,.10)" stroke-width="2"/>
+                  </g>
                 </g>
-              </g>
 
-              <g class="eyeHeart" opacity="0">
-                <path d="M96 88 C96 80, 106 80, 108 87 C110 80, 120 80, 120 88
-                         C120 97, 108 102, 108 102 C108 102, 96 97, 96 88Z"
-                      fill="var(--heart2)" stroke="rgba(0,0,0,.10)" stroke-width="2"/>
-                <path d="M140 88 C140 80, 150 80, 152 87 C154 80, 164 80, 164 88
-                         C164 97, 152 102, 152 102 C152 102, 140 97, 140 88Z"
-                      fill="var(--heart2)" stroke="rgba(0,0,0,.10)" stroke-width="2"/>
-              </g>
-            </g>
+                <path d="M95 225 C90 235, 95 242, 114 241 C112 234, 104 228, 95 225Z" fill="var(--steveO)" opacity=".95"/>
+                <path d="M165 225 C170 235, 165 242, 146 241 C148 234, 156 228, 165 225Z" fill="var(--steveO)" opacity=".95"/>
 
-            <g id="lizMouth">
-              <path class="mouthClosed" d="M110 114 C120 126, 140 126, 150 114"
-                    fill="none" stroke="rgba(0,0,0,.22)" stroke-width="4" stroke-linecap="round"/>
-              <path class="mouthOpen" opacity="0"
-                    d="M112 114 C118 134, 142 134, 148 114 C142 120, 118 120, 112 114Z"
-                    fill="rgba(0,0,0,.18)"/>
-            </g>
+                <g id="steveCupWrap">
+                  <g id="steveCup">
+                    <path d="M100 192 C96 192, 92 188, 92 184 V176 C92 172, 96 170, 100 170 H134 C138 170, 142 172, 142 176 V184
+                             C142 188, 138 192, 134 192 H100Z"
+                          fill="var(--cup)" stroke="rgba(0,0,0,.10)" stroke-width="2"/>
+                    <path d="M138 176 C150 178, 150 188, 138 188" fill="none" stroke="rgba(0,0,0,.12)" stroke-width="5" stroke-linecap="round"/>
+                    <path d="M98 178 H136" stroke="rgba(0,0,0,.07)" stroke-width="4" stroke-linecap="round"/>
+                    <ellipse cx="117" cy="176" rx="18" ry="5" fill="var(--coffee)" opacity=".92"/>
 
-            <g id="lizCupWrap">
-              <g id="lizCup">
-                <path d="M150 192 C146 192, 142 188, 142 184 V176 C142 172, 146 170, 150 170 H184 C188 170, 192 172, 192 176 V184
-                         C192 188, 188 192, 184 192 H150Z"
-                      fill="var(--cup)" stroke="rgba(0,0,0,.10)" stroke-width="2"/>
-                <path d="M188 176 C200 178, 200 188, 188 188" fill="none" stroke="rgba(0,0,0,.12)" stroke-width="5" stroke-linecap="round"/>
-                <path d="M148 178 H186" stroke="rgba(0,0,0,.07)" stroke-width="4" stroke-linecap="round"/>
-                <ellipse cx="167" cy="176" rx="18" ry="5" fill="var(--coffee)" opacity=".92"/>
+                    <path class="steamPath s1" d="M106 166 C110 160, 114 160, 116 154 C118 148, 112 146, 112 140" />
+                    <path class="steamPath s2" d="M120 166 C124 160, 128 160, 130 154 C132 148, 126 146, 126 140" />
+                    <path class="steamPath s3" d="M134 166 C138 160, 142 160, 144 154 C146 148, 140 146, 140 140" />
+                  </g>
+                </g>
+              </svg>
+            </div>
 
-                <path class="steamPath s1" d="M156 166 C160 160, 164 160, 166 154 C168 148, 162 146, 162 140" />
-                <path class="steamPath s2" d="M170 166 C174 160, 178 160, 180 154 C182 148, 176 146, 176 140" />
-                <path class="steamPath s3" d="M184 166 C188 160, 192 160, 194 154 C196 148, 190 146, 190 140" />
-              </g>
-            </g>
-          </svg>
-        </div>
-      </div>
+            <!-- Liz -->
+            <div class="char" id="lizChar">
+              <div class="nameTag" id="lizTag">👩‍🦰 <strong>Liz</strong> <small>chica</small></div>
 
-      <!-- Controls -->
-      <div class="panel" role="region" aria-label="Controles">
-        <div class="panelRow">
-          <div class="seg" role="group" aria-label="Elegir personaje">
-            <label><input type="radio" name="role" value="steve" checked> 🐥 Soy Steve</label>
-            <label><input type="radio" name="role" value="liz"> 👩‍🦰 Soy Liz</label>
+              <div class="bubble right" id="lizBubble">
+                <div class="who">👩‍🦰 Liz dice:</div>
+                <div class="msg" id="lizMsg">...</div>
+              </div>
+
+              <svg id="lizSvg" class="liz" width="100%" viewBox="0 0 260 260" role="img" aria-label="Liz con café">
+                <defs>
+                  <linearGradient id="lizDressG" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="var(--lizDress2)"/>
+                    <stop offset="100%" stop-color="var(--lizDress)"/>
+                  </linearGradient>
+                  <radialGradient id="lizSpec" cx="30%" cy="25%" r="60%">
+                    <stop offset="0%" stop-color="rgba(255,255,255,.55)"/>
+                    <stop offset="100%" stop-color="rgba(255,255,255,0)"/>
+                  </radialGradient>
+                </defs>
+
+                <ellipse cx="130" cy="242" rx="84" ry="16" fill="rgba(0,0,0,.10)"/>
+
+                <path d="M78 192 C88 150, 106 128, 130 128 C154 128, 172 150, 182 192
+                         C168 206, 150 214, 130 214 C110 214, 92 206, 78 192Z"
+                      fill="url(#lizDressG)" stroke="rgba(0,0,0,.10)" stroke-width="3"/>
+
+                <path d="M82 152 C62 162, 62 184, 82 192 C92 196, 100 186, 98 174 C96 162, 90 154, 82 152Z"
+                      fill="var(--lizSkin)" stroke="rgba(0,0,0,.08)" stroke-width="2"/>
+                <path d="M178 152 C198 162, 198 184, 178 192 C168 196, 160 186, 162 174 C164 162, 170 154, 178 152Z"
+                      fill="var(--lizSkin)" stroke="rgba(0,0,0,.08)" stroke-width="2"/>
+
+                <circle cx="130" cy="86" r="58" fill="var(--lizSkin)" stroke="rgba(0,0,0,.10)" stroke-width="3"/>
+                <ellipse cx="118" cy="70" rx="48" ry="38" fill="url(#lizSpec)" opacity=".65"/>
+
+                <path d="M72 90 C72 48, 98 28, 130 28 C168 28, 190 52, 190 92
+                         C182 76, 170 70, 160 68 C154 52, 144 46, 130 46
+                         C114 46, 104 54, 98 68 C88 70, 78 74, 72 90Z"
+                      fill="var(--lizHair)" opacity=".98"/>
+
+                <g>
+                  <g class="eyeNormal">
+                    <circle cx="108" cy="90" r="15" fill="#fff" stroke="rgba(0,0,0,.12)" stroke-width="3"/>
+                    <circle cx="152" cy="90" r="15" fill="#fff" stroke="rgba(0,0,0,.12)" stroke-width="3"/>
+                    <circle class="pupilMove" cx="110" cy="93" r="6.7" fill="rgba(0,0,0,.55)"/>
+                    <circle class="pupilMove" cx="154" cy="93" r="6.7" fill="rgba(0,0,0,.55)"/>
+                    <circle cx="105" cy="86" r="2.8" fill="rgba(255,255,255,.95)"/>
+                    <circle cx="149" cy="86" r="2.8" fill="rgba(255,255,255,.95)"/>
+                  </g>
+
+                  <g class="eyeHeart" opacity="0">
+                    <path d="M96 88 C96 80, 106 80, 108 87 C110 80, 120 80, 120 88
+                             C120 97, 108 102, 108 102 C108 102, 96 97, 96 88Z"
+                          fill="var(--heart2)" stroke="rgba(0,0,0,.10)" stroke-width="2"/>
+                    <path d="M140 88 C140 80, 150 80, 152 87 C154 80, 164 80, 164 88
+                             C164 97, 152 102, 152 102 C152 102, 140 97, 140 88Z"
+                          fill="var(--heart2)" stroke="rgba(0,0,0,.10)" stroke-width="2"/>
+                  </g>
+                </g>
+
+                <g id="lizMouth">
+                  <path class="mouthClosed" d="M110 114 C120 126, 140 126, 150 114"
+                        fill="none" stroke="rgba(0,0,0,.22)" stroke-width="4" stroke-linecap="round"/>
+                  <path class="mouthOpen" opacity="0"
+                        d="M112 114 C118 134, 142 134, 148 114 C142 120, 118 120, 112 114Z"
+                        fill="rgba(0,0,0,.18)"/>
+                </g>
+
+                <g id="lizCupWrap">
+                  <g id="lizCup">
+                    <path d="M150 192 C146 192, 142 188, 142 184 V176 C142 172, 146 170, 150 170 H184 C188 170, 192 172, 192 176 V184
+                             C192 188, 188 192, 184 192 H150Z"
+                          fill="var(--cup)" stroke="rgba(0,0,0,.10)" stroke-width="2"/>
+                    <path d="M188 176 C200 178, 200 188, 188 188" fill="none" stroke="rgba(0,0,0,.12)" stroke-width="5" stroke-linecap="round"/>
+                    <path d="M148 178 H186" stroke="rgba(0,0,0,.07)" stroke-width="4" stroke-linecap="round"/>
+                    <ellipse cx="167" cy="176" rx="18" ry="5" fill="var(--coffee)" opacity=".92"/>
+
+                    <path class="steamPath s1" d="M156 166 C160 160, 164 160, 166 154 C168 148, 162 146, 162 140" />
+                    <path class="steamPath s2" d="M170 166 C174 160, 178 160, 180 154 C182 148, 176 146, 176 140" />
+                    <path class="steamPath s3" d="M184 166 C188 160, 192 160, 194 154 C196 148, 190 146, 190 140" />
+                  </g>
+                </g>
+              </svg>
+            </div>
           </div>
+        </div>
 
-          <div class="seg" role="group" aria-label="Voz">
-            <label><input type="checkbox" id="voiceToggle"> 🔊 Voz (leer en voz alta)</label>
+        <div class="panelWrap">
+          <div class="panel collapsed" id="panel" role="region" aria-label="Controles">
+            <div class="handleRow" id="handleRow">
+              <div class="grab">
+                <span class="bar" aria-hidden="true"></span>
+                <span id="grabText">Controles (toca para abrir)</span>
+              </div>
+              <button class="miniBtn" id="togglePanel" type="button">Abrir</button>
+            </div>
+
+            <div class="panelBody" id="panelBody">
+              <div class="panelRow">
+                <div class="seg" role="group" aria-label="Elegir personaje">
+                  <label><input type="radio" name="role" value="steve" checked> 🐥 Soy Steve</label>
+                  <label><input type="radio" name="role" value="liz"> 👩‍🦰 Soy Liz</label>
+                </div>
+
+                <div class="seg" role="group" aria-label="Voz">
+                  <label><input type="checkbox" id="voiceToggle"> 🔊 Voz (leer en voz alta)</label>
+                </div>
+
+                <div class="input">
+                  <input id="text" type="text" maxlength="180" placeholder="Escribe un mensaje para que lo diga el personaje…" />
+                  <button class="btn" id="send" type="button">💬 Decir</button>
+                </div>
+              </div>
+
+              <div class="panelRow" style="margin-top:10px; justify-content:flex-end;">
+                <button class="btn" id="love" type="button">😍 Enamorados</button>
+                <button class="btn" id="clink" type="button">☕ Choque de tazas</button>
+                <button class="btn" id="sip" type="button">☕ Tomar café</button>
+              </div>
+
+              <div class="hint">
+                <span class="pill">📱 Teléfono vertical OK</span>
+                <span class="pill">✅ Steve & Liz completos</span>
+                <span class="pill">🗣️ Steve “hombre” / Liz “mujer”</span>
+              </div>
+            </div>
           </div>
-
-          <div class="input">
-            <input id="text" type="text" maxlength="160" placeholder="Escribe un mensaje para que lo diga el personaje…" />
-            <button class="btn" id="send" type="button">💬 Decir</button>
-          </div>
         </div>
 
-        <div class="panelRow" style="margin-top:10px; justify-content:flex-end;">
-          <button class="btn" id="love" type="button">😍 Enamorados</button>
-          <button class="btn" id="kiss" type="button">💋 Beso</button>
-          <button class="btn" id="sip" type="button">☕ Tomar café</button>
-        </div>
-
-        <div class="hint">
-          <span class="pill">✅ Ya NO se cortan nombres ni diálogos</span>
-          <span class="pill">🗣️ Steve “hombre” (pitch bajo) / Liz “mujer” (pitch alto)</span>
-          <span class="pill">☕ Vapor animado + taza llega a la boca</span>
-        </div>
-      </div>
-    </div>
-  </div>
+      </div><!-- layout -->
+    </div><!-- scene -->
+  </div><!-- wrap -->
 
   <script>
     (() => {
       const scene = document.getElementById('scene');
+      const stage = document.getElementById('stage');
+
+      const panel = document.getElementById('panel');
+      const handleRow = document.getElementById('handleRow');
+      const togglePanelBtn = document.getElementById('togglePanel');
+      const grabText = document.getElementById('grabText');
+
       const heartsLayer = document.getElementById('heartsLayer');
       const toast = document.getElementById('toast');
 
@@ -900,9 +980,9 @@
       const text = document.getElementById('text');
       const send = document.getElementById('send');
 
-      const loveBtn = document.getElementById('love');
-      const kissBtn = document.getElementById('kiss');
-      const sipBtn  = document.getElementById('sip');
+      const loveBtn  = document.getElementById('love');
+      const clinkBtn = document.getElementById('clink');
+      const sipBtn   = document.getElementById('sip');
 
       const roleRadios = [...document.querySelectorAll('input[name="role"]')];
       const voiceToggle = document.getElementById('voiceToggle');
@@ -915,9 +995,14 @@
       let autoHeartTimer = null;
       let microGazeTimer = null;
 
-      // Voice
       let voiceOn = false;
       let voices = [];
+
+      function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
+
+      function isPortraitMobile(){
+        return window.matchMedia('(max-width: 640px) and (orientation: portrait)').matches;
+      }
 
       function getRole(){
         return (roleRadios.find(r => r.checked)?.value) || 'steve';
@@ -927,17 +1012,28 @@
         toast.textContent = msg;
         toast.classList.add('show');
         clearTimeout(toast._t);
-        toast._t = setTimeout(() => toast.classList.remove('show'), 1600);
+        toast._t = setTimeout(() => toast.classList.remove('show'), 1500);
       }
 
-      // Clamp helper: evita que se corte por arriba/izquierda/derecha
-      function clampToScene(el){
+      // ===== FIX PRINCIPAL: ESCALA AUTOMÁTICA POR ALTO DEL STAGE =====
+      function updateCharScale(){
+        const h = stage.clientHeight;
+        // base 520 (escenario cómodo). si baja, reduce escala pero nunca desaparece.
+        let s = clamp(h / 520, 0.68, 1);
+        // si panel está abierto en móvil, baja un poquito más
+        if(isPortraitMobile() && !panel.classList.contains('collapsed')){
+          s = clamp(s - 0.06, 0.66, 0.98);
+        }
+        scene.style.setProperty('--charScale', s.toFixed(3));
+      }
+
+      // Clamp a stage (para que tags/bubbles no se salgan)
+      function clampToStage(el){
         const pad = 10;
-        const sr = scene.getBoundingClientRect();
+        const sr = stage.getBoundingClientRect();
         const r  = el.getBoundingClientRect();
 
         let dx = 0, dy = 0;
-
         if(r.left < sr.left + pad) dx += (sr.left + pad - r.left);
         if(r.right > sr.right - pad) dx -= (r.right - (sr.right - pad));
         if(r.top < sr.top + pad) dy += (sr.top + pad - r.top);
@@ -948,11 +1044,32 @@
       }
 
       function clampAllFloating(){
-        clampToScene(steveTag);
-        clampToScene(lizTag);
-        if(steveBubble.classList.contains('show')) clampToScene(steveBubble);
-        if(lizBubble.classList.contains('show')) clampToScene(lizBubble);
+        clampToStage(steveTag);
+        clampToStage(lizTag);
+        if(steveBubble.classList.contains('show')) clampToStage(steveBubble);
+        if(lizBubble.classList.contains('show')) clampToStage(lizBubble);
       }
+
+      // Drawer
+      function setPanelCollapsed(collapsed){
+        panel.classList.toggle('collapsed', collapsed);
+        togglePanelBtn.textContent = collapsed ? 'Abrir' : 'Cerrar';
+        grabText.textContent = collapsed ? 'Controles (toca para abrir)' : 'Controles (toca para cerrar)';
+        requestAnimationFrame(() => {
+          updateCharScale();
+          clampAllFloating();
+        });
+      }
+      function togglePanel(){
+        setPanelCollapsed(!panel.classList.contains('collapsed'));
+      }
+      togglePanelBtn.addEventListener('click', (e) => { e.stopPropagation(); togglePanel(); });
+      handleRow.addEventListener('click', togglePanel);
+
+      // Auto-expand when typing on mobile
+      text.addEventListener('focus', () => {
+        if(isPortraitMobile()) setPanelCollapsed(false);
+      });
 
       // Hearts
       function spawnHeart(x, y, intensity=1){
@@ -981,7 +1098,6 @@
         steveBubble.classList.remove('show');
         lizBubble.classList.remove('show');
 
-        // reset clamp so it can recalc correctly
         steveBubble.style.setProperty('--clampX', '0px');
         steveBubble.style.setProperty('--clampY', '0px');
         lizBubble.style.setProperty('--clampX', '0px');
@@ -995,7 +1111,6 @@
           lizBubble.classList.add('show');
         }
 
-        // clamp after paint
         requestAnimationFrame(() => clampAllFloating());
 
         clearTimeout(bubbleTimer);
@@ -1074,8 +1189,6 @@
       function pickVoiceFor(who){
         const es = getSpanishVoices();
         if(!es.length) return voices[0] || null;
-
-        // si hay varias, intenta usar distinta para cada uno
         if(es.length >= 2){
           return (who === 'liz') ? es[1] : es[0];
         }
@@ -1087,7 +1200,6 @@
           showToast('⚠️ Tu navegador no soporta voz');
           return;
         }
-
         try{ window.speechSynthesis.cancel(); }catch(e){}
 
         const utter = new SpeechSynthesisUtterance(message);
@@ -1096,8 +1208,6 @@
 
         utter.lang = v?.lang || 'es-MX';
         utter.rate = 1.02;
-
-        // Steve (hombre): pitch bajo / Liz (mujer): pitch alto
         utter.pitch = (who === 'liz') ? 1.18 : 0.85;
 
         utter.onstart = () => startTalking(who);
@@ -1107,7 +1217,6 @@
         window.speechSynthesis.speak(utter);
       }
 
-      // Actions
       function sayMessage(){
         const msg = (text.value || '').trim();
         if(!msg) return;
@@ -1122,8 +1231,8 @@
 
         speakText(who, msg);
 
-        const rect = scene.getBoundingClientRect();
-        burstHearts(rect.width*0.5, rect.height*0.56, 12);
+        const rect = stage.getBoundingClientRect();
+        burstHearts(rect.width*0.5, rect.height*0.60, 12);
 
         text.value = '';
         text.focus();
@@ -1134,67 +1243,53 @@
         scene.classList.toggle('loveMode', loveOn);
         loveBtn.textContent = loveOn ? '💞 Enamorados: ON' : '😍 Enamorados';
 
-        const rect = scene.getBoundingClientRect();
+        const rect = stage.getBoundingClientRect();
         if(loveOn){
-          burstHearts(rect.width*0.5, rect.height*0.54, 20);
+          burstHearts(rect.width*0.5, rect.height*0.58, 20);
           showToast('💞 Ojos de corazón');
         }else{
           showToast('🙂 Ojos normales');
         }
       }
 
-      function doKiss(){
-        if(prefersReduced) return;
-
-        steveChar.classList.add('kissLeft');
-        lizChar.classList.add('kissRight');
+      function clinkCups(){
         lookAtEachOther(1200);
+        showBubble('steve', '¡Salud! ☕✨');
+        setTimeout(() => showBubble('liz', '¡Salud, Steve! 🥰☕'), 300);
 
-        const rect = scene.getBoundingClientRect();
-        setTimeout(() => burstHearts(rect.width*0.5, rect.height*0.52, 22), 220);
-
-        setTimeout(() => {
-          steveChar.classList.remove('kissLeft');
-          lizChar.classList.remove('kissRight');
-        }, 900);
+        const rect = stage.getBoundingClientRect();
+        burstHearts(rect.width*0.5, rect.height*0.62, 18);
+        showToast('☕ ¡Choque de tazas!');
       }
 
       function toggleSip(){
         if(prefersReduced) return;
 
-        sipOn = !sipOn;
-        steveSvg.classList.toggle('sipSteve', sipOn);
-        lizSvg.classList.toggle('sipLiz', sipOn);
+        sipOn = true;
+        steveSvg.classList.add('sipSteve');
+        lizSvg.classList.add('sipLiz');
 
-        sipBtn.textContent = sipOn ? '☕ Tomando…' : '☕ Tomar café';
+        sipBtn.textContent = '☕ Tomando…';
+        showToast('☕ Cafecito calentito');
+        lookAtEachOther(1400);
 
-        const rect = scene.getBoundingClientRect();
-        if(sipOn){
-          showToast('☕ Cafecito calentito');
-          lookAtEachOther(1400);
-          setTimeout(() => burstHearts(rect.width*0.5, rect.height*0.58, 14), 320);
-
-          setTimeout(() => {
-            sipOn = false;
-            steveSvg.classList.remove('sipSteve');
-            lizSvg.classList.remove('sipLiz');
-            sipBtn.textContent = '☕ Tomar café';
-          }, 3600);
-        }else{
-          showToast('☕ Listo');
-        }
+        setTimeout(() => {
+          sipOn = false;
+          steveSvg.classList.remove('sipSteve');
+          lizSvg.classList.remove('sipLiz');
+          sipBtn.textContent = '☕ Tomar café';
+        }, 3600);
       }
 
-      // Ambient hearts
       function startAutoHearts(){
         if(prefersReduced) return;
         stopAutoHearts();
         autoHeartTimer = setInterval(() => {
-          const rect = scene.getBoundingClientRect();
+          const rect = stage.getBoundingClientRect();
           const x = rect.width*(0.5 + (Math.random()-0.5)*0.22);
-          const y = rect.height*(0.56 + (Math.random()-0.5)*0.07);
+          const y = rect.height*(0.62 + (Math.random()-0.5)*0.07);
           spawnHeart(x, y, 1.0);
-        }, 460);
+        }, 520);
       }
       function stopAutoHearts(){
         if(autoHeartTimer){
@@ -1203,19 +1298,17 @@
         }
       }
 
-      // Click -> hearts
-      scene.addEventListener('pointerdown', (e) => {
-        const rect = scene.getBoundingClientRect();
+      stage.addEventListener('pointerdown', (e) => {
+        const rect = stage.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         burstHearts(x, y, 14);
       });
 
-      // Events
       send.addEventListener('click', sayMessage);
       text.addEventListener('keydown', (e) => { if(e.key === 'Enter') sayMessage(); });
       loveBtn.addEventListener('click', toggleLove);
-      kissBtn.addEventListener('click', doKiss);
+      clinkBtn.addEventListener('click', clinkCups);
       sipBtn.addEventListener('click', toggleSip);
 
       voiceToggle.addEventListener('change', () => {
@@ -1232,31 +1325,45 @@
         }
       });
 
-      // Init voices
       if('speechSynthesis' in window){
         refreshVoices();
         window.speechSynthesis.onvoiceschanged = () => refreshVoices();
       }
 
-      // Initial clamp + resize clamp
-      function initClamp(){
+      const ro = new ResizeObserver(() => {
+        updateCharScale();
         requestAnimationFrame(() => clampAllFloating());
-      }
-      window.addEventListener('resize', initClamp);
+      });
+      ro.observe(stage);
+      ro.observe(panel);
 
-      // Intro
+      window.addEventListener('resize', () => {
+        updateCharScale();
+        requestAnimationFrame(() => clampAllFloating());
+        if(isPortraitMobile()) setPanelCollapsed(true);
+      });
+
+      // INIT
+      updateCharScale();
+      requestAnimationFrame(() => clampAllFloating());
+
+      if(isPortraitMobile()){
+        setPanelCollapsed(true);
+      } else {
+        setPanelCollapsed(false);
+      }
+
       showBubble('steve', '¡Hola Liz! ☕✨');
       lookAtEachOther(1600);
       setTimeout(() => showBubble('liz', '¡Hola Steve! Qué linda cita 🥰'), 1100);
 
       startAutoHearts();
       startMicroGaze();
-      initClamp();
 
       if(prefersReduced){
         stopAutoHearts();
         stopMicroGaze();
-        showToast('🧘 Modo tranquilo (sin animaciones fuertes)');
+        showToast('🧘 Modo tranquilo');
       }
     })();
   </script>
